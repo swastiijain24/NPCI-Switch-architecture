@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributed UPI Ecosystem Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgMain: '#050505',
+                        bgCard: '#0f0f11',
+                        borderMain: '#27272a',
+                        textMain: '#f8fafc',
+                        textMuted: '#94a3b8',
+                        primary: '#818cf8',
+                        success: '#34d399',
+                        info: '#38bdf8',
+                        warning: '#fbbf24',
+                        danger: '#fb7185',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #050505;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }
+
+        .diagram-box {
+            background: #0f0f11;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .list-bullet {
+            position: relative;
+            padding-left: 1.25rem;
+        }
+
+        .list-bullet::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #818cf8;
+            font-weight: bold;
+            font-size: 1.2em;
+            line-height: 1;
+            top: 2px;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-primary selection:text-white">
+
+    <nav class="fixed w-full z-50 bg-[#050505]/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <div class="flex items-center space-x-3">
+                    <img src="./npci.png" alt="NPCI Logo"
+                        class="w-7 h-7 rounded object-contain border border-white/10 bg-white/5 p-0.5"
+                        onerror="this.onerror=null; this.src='https://placehold.co/28x28/18181b/818cf8?text=N';">
+                    <span class="font-bold text-base tracking-tight">NPCI Architecture</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-6 text-sm font-medium">
+                        <a href="#context" class="text-textMuted hover:text-white transition">Context</a>
+                        <a href="#flows" class="text-textMuted hover:text-white transition">Flows</a>
+                        <a href="#engineering" class="text-textMuted hover:text-white transition">Engineering</a>
+                        <a href="#repos" class="text-textMuted hover:text-white transition">Repositories</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-12 relative overflow-hidden">
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-primary/10 blur-[100px] rounded-full pointer-events-none">
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-3xl md:text-5xl font-bold tracking-tight mb-4 textMain">
+                Distributed Payment <span class="gradient-text">Switch Architecture</span>
+            </h1>
+            <p class="text-base text-textMuted mb-8 max-w-2xl mx-auto">
+                A production-grade simulation of the core infrastructure powering the Unified Payments Interface (UPI).
+                Engineered for strict ACID guarantees, sub-second latency, and horizontal scalability.
+            </p>
+
+        </div>
+    </main>
+
+    <section id="context" class="py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 border-l-4 border-info pl-3">
+                <h2 class="text-2xl font-bold textMain mb-1">Real World vs. Simulation</h2>
+                <p class="text-textMuted text-sm">Where this architecture fits within the UPI ecosystem.</p>
+            </div>
+
+            <!-- FIXED PARALLEL LAYOUT -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+
+                <!-- LEFT: REAL UPI ECOSYSTEM -->
+                <div class="bg-zinc-900/20 p-4 rounded-lg border border-white/10 h-full">
+                    <h3 class="text-lg font-bold mb-3 text-white">
+                        The Real UPI Ecosystem
+                    </h3>
+                    <p class="text-sm text-textMuted mb-4">
+                        In the real world, UPI is a massive multi-party network. The user initiates a request via a
+                        Third-Party App (e.g., Google Pay), which sends the request to a sponsor PSP Bank.
+
+                        The PSP Bank routes the request to the central <strong>NPCI Switch</strong>. NPCI acts as the
+                        clearinghouse- it validates the VPAs, identifies the Remitter and Beneficiary banks, and
+                        synchronously orchestrates the debit and credit legs directly with the banks' core ledgers
+                        before responding to the user.
+                    </p>
+                </div>
+
+                <!-- MIDDLE: IMAGE -->
+                <div class="flex justify-center items-center h-full bg-zinc-900/20 p-2 rounded-lg border border-white/10">
+                    <img src="./architecture.png" alt="Architecture Diagram"
+                        class="rounded-lg border border-white/10 shadow-xl shadow-primary/10 w-full max-h-[420px] object-contain bg-[#0f0f11] p-1"
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x300/18181b/818cf8?text=Architecture+Diagram';">
+                </div>
+
+                <!-- RIGHT: THIS ARCHITECTURAL SIMULATION -->
+                <div class="bg-zinc-900/20 p-4 rounded-lg border border-white/10 h-full">
+                    <h3 class="text-lg font-bold mb-3 text-white">
+                        This Architectural Simulation
+                    </h3>
+                    <p class="text-sm text-textMuted mb-4">
+                        This project focuses on building the highly-available, fault-tolerant NPCI switch that
+                        sits in the middle, partitioned into three internal microservices:
+                    </p>
+                    <ul class="space-y-3 text-sm text-textMuted">
+                        <li><strong class="text-white">1. PSP-Service:</strong> Acts as the ingress gateway. Resolves
+                            VPAs and handles client-facing connections.</li>
+                        <li><strong class="text-white">2. Core-Service:</strong> The heart of the switch. It owns the
+                            global Saga state, tracks transaction legs, and guarantees message delivery.</li>
+                        <li><strong class="text-white">3. Bank-Service:</strong> The egress adapter. Translates internal
+                            Kafka events into high-throughput calls to external banking networks.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="flows" class="py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 border-l-4 border-primary pl-3">
+                <h2 class="text-2xl font-bold textMain mb-1">Message Routing Flows</h2>
+                <p class="text-textMuted text-sm">Decoupled services maintaining state through the multi-leg Saga
+                    pattern.</p>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(129,140,248,0.8)]"></span>
+                    End-to-End Saga Execution
+                </h3>
+                <div class="diagram-box max-w-4xl mx-auto border border-primary/20 shadow-xl shadow-black/50">
+                    <pre class="mermaid">
+                        %%{init: {'theme': 'dark', 'themeVariables': { 'background': '#0f0f11' }}}%%
+                        sequenceDiagram
+                            participant App as External App
+                            box rgb(25, 25, 30) NPCI Switch
+                                participant PSP
+                                participant Core
+                                participant Adapter
+                            end
+                            participant Remitter as RemBank
+                            participant Ben as BenBank
+
+                            App->>PSP: POST /process
+                            PSP->>Core: Kafka: payment.req
+                            note over Core: Atomic Save (DEBIT_PENDING)
+                            
+                            Core->>Adapter: Kafka: bank.inst (Debit)
+                            Adapter->>Remitter: POST /debit
+                            Remitter-->>Adapter: 200 OK
+                            Adapter->>Core: Kafka: bank.res
+                            note over Core: Update Leg (CREDIT_PENDING)
+                            
+                            Core->>Adapter: Kafka: bank.inst (Credit)
+                            Adapter->>Ben: POST /credit
+                            Ben-->>Adapter: 200 OK
+                            Adapter->>Core: Kafka: bank.res
+                            
+                            note over Core: Saga Complete (SUCCESS)
+                            Core->>PSP: Kafka: payment.res
+                            PSP-->>App: Poll: Success
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="engineering" class="py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 border-l-4 border-warning pl-3">
+                <h2 class="text-2xl font-bold textMain mb-1">Engineering & Design Patterns</h2>
+                <p class="text-textMuted text-sm">Architectural solutions to distributed computing problems.</p>
+            </div>
+
+            <ul class="space-y-8 border-l border-white/10 ml-2 pl-6">
+                <li class="relative">
+                    <div
+                        class="absolute w-3 h-3 bg-primary rounded-full -left-[30px] top-1.5 shadow-[0_0_10px_rgba(129,140,248,0.8)]">
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1"><span class="text-primary mr-1">Outbox
+                            Pattern:</span> Atomicity & Delivery</h3>
+                    <p class="text-sm text-textMuted">Atomically commits database state and Kafka payloads to a single
+                        Postgres transaction. A background relay worker guarantees <em>At-Least-Once Delivery</em>,
+                        preventing dangerous dual-write network failures.</p>
+                </li>
+
+                <li class="relative">
+                    <div
+                        class="absolute w-3 h-3 bg-danger rounded-full -left-[30px] top-1.5 shadow-[0_0_10px_rgba(251,113,133,0.8)]">
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1"><span class="text-danger mr-1">Choreographed
+                            Sagas:</span> Distributed Rollbacks</h3>
+                    <p class="text-sm text-textMuted">Since SQL rollbacks fail across microservices, the Core-Service
+                        maintains eventual consistency by automatically queuing a compensating `REFUND` event if a
+                        credit transaction fails.</p>
+                </li>
+
+                <li class="relative">
+                    <div
+                        class="absolute w-3 h-3 bg-warning rounded-full -left-[30px] top-1.5 shadow-[0_0_10px_rgba(251,191,36,0.8)]">
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1"><span class="text-warning mr-1">Async
+                            Messaging:</span> Fault Tolerance</h3>
+                    <p class="text-sm text-textMuted">Replaces synchronous APIs with Apache Kafka to eliminate
+                        thread-blocking. Safely buffers requests during downstream bank outages without dropping
+                        critical financial data.</p>
+                </li>
+
+                <li class="relative">
+                    <div
+                        class="absolute w-3 h-3 bg-info rounded-full -left-[30px] top-1.5 shadow-[0_0_10px_rgba(56,189,248,0.8)]">
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1"><span class="text-info mr-1">2-Tier
+                            Idempotency:</span> Zero Double Deductions</h3>
+                    <p class="text-sm text-textMuted">Prevents retry duplicates. Redis caches successful hashes for
+                        ultra-fast (<10ms) rejection, while strict Postgres `UNIQUE` constraints physically block
+                            edge-case race conditions.</p>
+                </li>
+
+                <li class="relative">
+                    <div
+                        class="absolute w-3 h-3 bg-success rounded-full -left-[30px] top-1.5 shadow-[0_0_10px_rgba(52,211,153,0.8)]">
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1"><span class="text-success mr-1">Active
+                            Reconciliation:</span> Self-Healing State</h3>
+                    <p class="text-sm text-textMuted">Cron workers actively sweep the database for stale `PENDING`
+                        records. They force the Bank Adapter to query the actual truth from external banks, auto-healing
+                        the local state machine.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="repos" class="py-8 mb-6">
+        <div class="max-w-6xl mx-auto px-4">
+
+            <!-- Section Header -->
+            <div class="mb-6 border-l-4 border-white pl-3">
+                <h5 class="text-xl md:text-xl font-bold tracking-tight textMain mb-1">
+                    Repositories
+                </h5>
+                <p class="text-textMuted text-sm">
+                    Independent services powering the distributed switch.
+                </p>
+            </div>
+
+            <!-- 5 items in one row -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 items-center">
+
+                <a href="https://github.com/swastiijain24/psp-service"
+                    class="group block p-3 border border-borderMain rounded hover:border-primary transition">
+                    <h3 class="text-xs font-bold text-white font-mono mb-1 group-hover:text-primary transition">
+                        psp-service
+                    </h3>
+                    <p class="text-[10px] text-textMuted">Ingress & VPA</p>
+                </a>
+
+                <a href="https://github.com/swastiijain24/core-service"
+                    class="group block p-3 border border-borderMain rounded hover:border-primary transition">
+                    <h3 class="text-xs font-bold text-white font-mono mb-1 group-hover:text-primary transition">
+                        core-service
+                    </h3>
+                    <p class="text-[10px] text-textMuted">Saga & state</p>
+                </a>
+
+                <a href="https://github.com/swastiijain24/bank-service"
+                    class="group block p-3 border border-borderMain rounded hover:border-primary transition">
+                    <h3 class="text-xs font-bold text-white font-mono mb-1 group-hover:text-primary transition">
+                        bank-service
+                    </h3>
+                    <p class="text-[10px] text-textMuted">Exec & idempotency</p>
+                </a>
+
+                <a href="https://github.com/swastiijain24/npci-contracts"
+                    class="group block p-3 border border-borderMain rounded hover:border-primary transition">
+                    <h3 class="text-xs font-bold text-white font-mono mb-1 group-hover:text-primary transition">
+                        contracts
+                    </h3>
+                    <p class="text-[10px] text-textMuted">Protobuf</p>
+                </a>
+
+                <a href="https://github.com/swastiijain24/npci-infra"
+                    class="group block p-3 border border-borderMain rounded hover:border-primary transition">
+                    <h3 class="text-xs font-bold text-white font-mono mb-1 group-hover:text-primary transition">
+                        infra
+                    </h3>
+                    <p class="text-[10px] text-textMuted">Kafka + DB configs for docker</p>
+                </a>
+
+            </div>
+        </div>
+    </section>
+    <footer class="py-8 text-center text-textMuted text-xs font-mono">
+        <p>
+            Engineered by <a href="https://github.com/swastiijain24" target="_blank"
+                class="text-primary hover:text-white transition">Swasti Jain</a>
+        </p>
+    </footer>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            fontFamily: 'Inter',
+            themeVariables: {
+                background: '#0a0a0c',
+                primaryColor: '#818cf8',
+                secondaryColor: '#34d399',
+                tertiaryColor: '#38bdf8',
+                lineColor: '#475569',
+                textColor: '#f8fafc',
+            },
+            sequence: {
+                showSequenceNumbers: false,
+                actorMargin: 30,
+                messageMargin: 25
+            }
+        });
+    </script>
+</body>
+
+</html>
